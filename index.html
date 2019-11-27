@@ -51,39 +51,38 @@ Christof Schöch (Trier)
 
 
 ---
-# Überblick
-<br/>
-1. [Einleitung](#/2)
-1. [Existierende Datensätze](#/3)
-2. [Analysemethoden und Datenformate](#/4)
-3. [Fazit](#/5)
-
-
----
 <br/>
 <br/>
 # 1. Einleitung
 
 --
+# Überblick
+<br/>
+1. [Einleitung](#/3)
+1. [Existierende Datensätze / Formate](#/3)
+2. [Analysemethoden der CLS](#/4)
+3. [Fazit](#/5)
+
+--
 ## Ausgangslage
 <br/>
-* Das "window of opportunity" für TDM in den CLS lautet 1800-1923/1948<br/>(USA: Publ. / EU: Autor)
-* Ausreichend große Mengen an gut digitalisierten Texten (Produktion, OCR)
-* Gemeinfrei für die Republikation von Datensätzen (Copyright)
-* Damit: Benchmark-Datensätze, Reproduzierbarkeit
+* Das "window of opportunity" für TDM in den CLS:<br/>1800-1923/1948(USA: Publ. / EU: Autor); damit:
+    * Ausreichend große Mengen an gut digitalisierten Texten (Produktion, OCR)
+    * Gemeinfrei für die Republikation von Datensätzen (Copyright)
+    * Nur hier: Benchmark-Datensätze, Reproduzierbarkeit, SotA
 
 --
 ## Leitfragen
 <br/>
 1. Welche Analysemethoden sind in den CLS weit verbreitet?
-2. Welche Datenformate sind für diese Methoden jeweils notwendig? 
-3. Welche Datenformaten sollten priorisiert werden? 
+2. Können diese Methoden auf urheberrechtlich unbedenklichen, abgeleiteten Datenformaten angewendet werden?
+3. Welche Datenformate sollten priorisiert werden? 
 
 
 ---
 <br/>
 <br/>
-# 2. Existierende Datensätze
+# 2. Existierende Datensätze / Formate
 
 --
 <a href="img/cangs.png"><img src="img/cangs.png" height="500"/></a>
@@ -110,52 +109,105 @@ Christof Schöch (Trier)
 <p>HathiTrust Extracted Features Dataset<br/>https://analytics.hathitrust.org/datasets</p>
 
 
+---
+<br/>
+<br/>
+# Vorschlag für ein<br/>abgeleitetes Datenformat
+
+--
+## Eigenschaften
+<br/>
+* Datenstruktur 
+    * Term-Dokument-Matrix oder (JSON-Datei)
+    * 1 Text = 1 Datei
+* Segmentierung 
+    * kleinteilig, bspw. 100 / 500 Wörter
+    * kleine Segmente => Sparseness, Dateigröße
+* Merkmale 
+    * Wortform, POS, Lemma: Häufigkeit pro Segment
+    * Disambiguieren / Filtern / Aggregieren
+* Rekonstruierbarkeit des Textes: eindeutig ausgeschlossen
+
+
+--
+## Beispiel: Michel Jeury, *Le Monde du Lignus*
+<img src="img/tdmr-format.png" height="500"/>
+<p>Ausschnitt aus einer Term-Dokument-Matrix</p>
+
+
+--
+## Mögliche Erweiterungen
+<br/>
+* Weitere Attribute eines Tokens, bspw.: "in direkter Rede"
+* Analog auch für N-Gramme denkbar (aber: Sparseness)
+* Auch als JSON-Datei implementierbar
+
+
+--
+## Dazu reichhaltige Metadaten
+<br/>
+* Jahr der Erstveröffentlichung
+* Autor inkl. VIAF/GND (oder Attribute)
+* Textlänge
+* Vers oder Prosa
+* Großgattung (narrativ, dramatisch, lyrisch)
+* narrative Prosa: Erzählform, Dialoganteil
+
 
 ---
 <br/>
 <br/>
-# 3. Analysemethoden und Datenformate
+# Analysemethoden
+
 
 --
 ## Analysemethoden im Überblick
 <br/>
-* Optical Character Recognition
-* Autorschaftsattribution (Textähnlichkeit)
-* Topic Modeling (Semantik)
-* Text Re-Use / Kollationierung
-* Word Embedding Models 
-* Sentiment Analysis
+* Autorschaftsattribution
+* Topic Modeling
 * Distinktive Merkmale
-* Soziale Netzwerkanalyse
+* Text Reuse
+* Netzwerkanalyse
+* Word Embedding Models 
+* Metaphernerkennung
+* ...
+
+
+---
+<br/>
+<br/>
+# Autorschaftsattribution
 
 --
 ## Autorschaftsattribution: Beispiel
 <a href="img/ratineaud.png"><img src="img/ratineaud.png" height="500"/></a>
-<p>Pierre Ratinaud, "The Brilliant Friend(s) of Elena Ferrante", 2018<br/>http://www.padovauniversitypress.it/publications/9788869381300</p>
+<p>Pierre Ratinaud 2018, "The Brilliant Friend(s) of Elena Ferrante"</p>
 
 --
 ## Autorschaftsattribution: How it works
 <br/>
-* Prinzip: Textähnlichkeit, Distanzmaße
-* Datenformat: Term-Dokument-Matrix
-* Parameter: Segmentierung, Wortliste, (Distanzmaß)
+* Prinzip: Textähnlichkeit, d.h.: bag-of-words, Vektorraum, Distanzmaße
+* Parameter: Segmentierung, Liste der Merkmale, (Distanzmaß)
 
 --
 ## Autorschaftsattribution: Datenformat
 <br/>
 * Datenformat: Term-Dokument-Matrix
 * Merkmale (einfachster Fall): Worthäufigkeiten pro Gesamtdokument (1-Gramme)
-* Merkmale (bester Fall): token_lemma_pos pro Dokumentabschnitt
-* Rekonstruierbarkeit: eindeutig ausgeschlossen
-* Fazit: insgesamt problemlos
+* Segmentierung: optional, aber nicht unüblich
+* Wortliste: in Abhängigkeit der Häufigkeit im Korpus
+* Fazit: mit vorgeschlagenem Format problemlos möglich
 
 
-
+---
+<br/>
+<br/>
+# Topic Modeling
 
 --
 ## Topic Modeling: Beispiel
 <a href="http://signsat40.signsjournal.org/topic-model/"><img src="img/signs-at-40.png" height="500"/></a>
-<p>Signs@40: Feminist Scholarship through Four Decades, 2014<br/>http://signsat40.signsjournal.org/topic-model/</p>
+<p>Mazzaschi et al. 2014, Signs@40</p>
 
 --
 ## Topic Modeling: How it works
@@ -170,18 +222,62 @@ Christof Schöch (Trier)
 ## Topic Modeling: Datenformat
 <br/>
 * Datenformat: Term-Dokument-Matrix
-* Merkmale: binär lemma_pos, binär kodiert, pro (kleinem) Dokumentabschnitt; ohne stopwords
-* Parameter: 
-* Rekonstruierbarkeit: eindeutigst ausgeschlossen
-* Fazit: aufwändiger zu produzieren, dennoch problemlos
+* Merkmale: binarisierte Häufigkeit; Lemmas nach POS gefiltert / Stopwords; kleine Textabschnitte
+* Fazit: etwas mehr Preprocessing, dennoch problemlos
 
+
+---
+<br/>
+<br/>
+# Distinktive Merkmale
 
 
 --
-## Text Re-Use: Beispiel
-<a href="http://signsat40.signsjournal.org/topic-model/"><img src="img/signs-at-40.png" height="500"/></a>
-<p>Signs@40: Feminist Scholarship through Four Decades, 2014<br/>http://signsat40.signsjournal.org/topic-model/</p>
+## Distinktive Merkmale: Beispiel
+<a href="img/zetascores_comedie-tragedie_1000-lemmata-all.svg"><img src="img/zetascores_comedie-tragedie_1000-lemmata-all.svg" height="500"/></a>
+<p>Distinktive Wörter in Komödien und Tragödien (Schöch 2017)</p>
 
+--
+## Distinktive Merkmale: How it works
+<br/>
+* Vielzahl von Verfahren, von einfach bis komplex
+* Avancierte Verfahren: 
+    * vergleichen den Grad der Dispersion
+    * hierfür ist Segmentierung notwendig
+
+
+--
+## Anforderungen an das Datenformat
+<br/>
+* Wortformen, Lemmata oder POS
+* POS-basierte Selektion
+* binarisierte Segment-Häufigkeit
+* Fazit: mit etwas Preprocessing möglich 
+
+---
+<br/>
+<br/>
+# Text Re-Use
+
+--
+## Text Re-Use: Beispiel
+<a href="img/pvierth-reuse.jpg"><img src="img/pvierth-reuse.jpg" height="400"/></a>
+<p>Text Re-Use zwischen zwei Chinesischen Romanen (Paul Vierthaler 2019)</p>
+
+--
+## Text Re-Use: How it works
+<br/>
+* Paarweiser Abgleich kleiner Textsegmente (4-6 Tokens)
+* Fuzzy matching (bspw. mit Levenshtein-Distanz)
+* bei Match wird die Alignierung expandiert
+
+--
+## Anforderungen an das Datenformat
+<br/>
+* Erster Schritt ok: Index der n-Gramme
+* Zweiter Schritt nicht möglich: 
+    * Expandieren der Matches erfordert längere zusammenhängende Abschnitte
+    * Es erfordert, den vollständigen Text zu prüfen
 
 
 
@@ -190,35 +286,41 @@ Christof Schöch (Trier)
 <br/>
 # 4. Fazit
 
+
 --
-## Ein für non-konsumptives TDM geeignetes Format
+## Nutzungsszenarien: ✔
 <br/>
-* Korpusformat: Term-Dokument-Matrix
-* Segmentierung: kleinteilig, bspw. 500 Wörter
-* Merkmale: Wortform_Lemma_POS: absolute Häufigkeit
+* ✔ Autorschaftsattribution: Segmentaggregation, Gesamthäufigkeit 
+* ✔ Topic Modeling: Stopwords teilweise Segmentaggregation, Binarisierung, POS-Filter, Lemma-Auswahl
+* ✔ Distinktive Merkmale: teilweise Segmentaggregation, Lemma-Auswahl
 
 --
-## Dazu reichhaltige Metadaten (!)
+## Nutzungsszenarien: ❌
 <br/>
-* Jahr der Erstveröffentlichung
-* Autor inkl. VIAF/GND (oder Merkmale)
-* Textlänge
-* Vers oder Prosa
-* Großgattung (narrativ, dramatisch, lyrisch)
+* **O** Netzwerkanalyse: mit Einschränkungen; POS-Selektion (Figurennamen), Binarisierung
+* ❌ Text Re-Use: benötigt mehr Kontext
+* ❌ Word Embeddings: benötigt mehr Kontext
+* ❌ Metaphernerkennung: benötigt mehr Kontext
 
 
---
+
+---
+# Bibliographie
 <br/>
-##
 
---
-## Bibliographie
 <small>
 
+* Pierre Ratinaud (2018), "The Brilliant Friend(s) of Elena Ferrante". *Drawing Elena Ferrante’s Profile*. Padova: Padova University Press. http://www.padovauniversitypress.it/publications/9788869381300. 
+* Christof Schöch (2018), "Zeta für die kontrastive Analyse literarischer Texte
+Theorie, Implementierung, Fallstudie", *Quantitative Ansätze in den Literatur- und Geisteswissenschaften: Systematische und historische Perspektiven*. Berlin: de Gruyter, 77–94. 
+* Paul Vierthaler and Mees Gelein, "A BLAST-based, Language-agnostic Text Reuse Algorithm with a MARKUS Implementation and Sequence Alignment Optimized for Large Chinese Corpora," *Journal of Cultural Analytics*. March 18, 2019. DOI: https://doi.org/10.31235/osf.io/7xpqe
+* Andrew Mazzaschi et al. (2014): *Signs@40: Feminist Scholarship through Four Decades*, http://signsat40.signsjournal.org/topic-model/.
 
 
 
 </small>
+
+
 
 
 ---
